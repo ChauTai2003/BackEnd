@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
-
-
-export const connectDB = async () =>{
-    await mongoose.connect('mongodb+srv://homemade:39796868@cluster0.55vcn.mongodb.net/HomeMade').then(()=>console.log("DB Connected"));
-}
+export const connectDB = async () => {
+  const mongoURI = process.env.MONGO_URI; // Lấy URL từ biến môi trường
+  if (!mongoURI) {
+    throw new Error("MONGO_URI is not defined in environment variables");
+  }
+  await mongoose
+    .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("DB Connected"))
+    .catch((err) => console.error("DB Connection Error:", err));
+};
